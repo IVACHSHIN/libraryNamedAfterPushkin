@@ -1,11 +1,11 @@
-version: '3.3'
+version: '3.9'
 
 services:
   dev-db:
-    image: postgres:13.2-alpine
+    image: postgres:13.1-alpine
     ports:
       - '5432:5432'
-    entrypoint:
+    environment:
       POSTGRES_PASSWORD: W800serF
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
