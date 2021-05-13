@@ -1,10 +1,12 @@
 package com.example.librarynamedafterpushkin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -30,7 +32,7 @@ class BookControllerTest {
 
     @Test
     void createBook() throws Exception {
-        Book testBook = mockBook();
+        BookDto testBook = mockBook();
 
 
         String json = objectMapper.writeValueAsString(testBook);
@@ -52,7 +54,7 @@ class BookControllerTest {
 
     @Test
     void findBook() throws Exception {
-        Book testBook = mockBook();
+        BookDto testBook = mockBook();
         String json = objectMapper.writeValueAsString(testBook);
 
         mockMvc.perform(post("/book").contentType(MediaType.APPLICATION_JSON).content(json))
@@ -69,17 +71,51 @@ class BookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)));
 
+    }
+
+    @Test
+    void createBookValidation() throws Exception {
+        BookDto testBook = mockBook();
+        testBook.setName(null);
+        testBook.setAuthor("");
+
+        mockMvc.perform(post("/book").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testBook)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.status", equalTo(HttpStatus.BAD_REQUEST.name())))
+        .andExpect(jsonPath("$.errors", containsInAnyOrder("author is mandatory", "name is mandatory")));
+
+        testBook = mockBook();
+        testBook.setIsbn("wrong format");
+
+        mockMvc.perform(post("/book").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testBook)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status", equalTo(HttpStatus.BAD_REQUEST.name())))
+                .andExpect(jsonPath("$.errors", containsInAnyOrder("isbn must match \"^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$\"")));
 
     }
 
-    private Book mockBook() {
-        Book testBook = new Book();
+    @Test
+    void getNotExistingBook() throws Exception {
+        mockMvc.perform(get("/book/321"))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("status", equalTo(HttpStatus.NOT_FOUND.name())))
+                .andExpect(jsonPath("errors", contains("Book not found")));
+    }
+
+
+    private BookDto mockBook() {
+        BookDto testBook = new BookDto();
         testBook.setName("Test name");
         testBook.setDescription("Test description");
         testBook.setAuthor("Test author");
         testBook.setPublisher("Test publisher");
         testBook.setYear(2020);
-        testBook.setIsbn("Test isbn");
+        testBook.setIsbn("978-617-7666-64-9");
 
         return testBook;
     }
