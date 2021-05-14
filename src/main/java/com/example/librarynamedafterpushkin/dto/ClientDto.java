@@ -19,6 +19,6 @@ public class ClientDto {
     private String email;
 
     @NotBlank(message = "is mandatory")
-    @Pattern(regexp = "^\\+380\\d{9}$")
+    @Pattern(regexp = "^\\+913\\d{7}$")
     private String phone;
 }
