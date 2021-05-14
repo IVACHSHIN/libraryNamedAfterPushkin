@@ -1,5 +1,8 @@
-package com.example.librarynamedafterpushkin;
+package com.example.librarynamedafterpushkin.controller;
 
+import com.example.librarynamedafterpushkin.dto.BookDto;
+import com.example.librarynamedafterpushkin.entity.Book;
+import com.example.librarynamedafterpushkin.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
