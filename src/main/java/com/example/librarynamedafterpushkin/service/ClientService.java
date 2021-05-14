@@ -1,5 +1,10 @@
-package com.example.librarynamedafterpushkin;
+package com.example.librarynamedafterpushkin.service;
 
+import com.example.librarynamedafterpushkin.dto.ClientDto;
+import com.example.librarynamedafterpushkin.exception.ConflictException;
+import com.example.librarynamedafterpushkin.exception.NotFoundException;
+import com.example.librarynamedafterpushkin.entity.Client;
+import com.example.librarynamedafterpushkin.repository.ClientRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

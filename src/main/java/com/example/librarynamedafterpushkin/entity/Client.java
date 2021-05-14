@@ -1,5 +1,6 @@
-package com.example.librarynamedafterpushkin;
+package com.example.librarynamedafterpushkin.entity;
 
+import com.example.librarynamedafterpushkin.dto.ClientDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.example.librarynamedafterpushkin;
+package com.example.librarynamedafterpushkin.dto;
 
 import lombok.Data;
 

@@ -1,5 +1,6 @@
-package com.example.librarynamedafterpushkin;
+package com.example.librarynamedafterpushkin.repository;
 
+import com.example.librarynamedafterpushkin.entity.Client;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
