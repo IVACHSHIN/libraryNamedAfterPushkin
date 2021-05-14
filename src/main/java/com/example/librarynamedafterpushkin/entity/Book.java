@@ -4,10 +4,11 @@ package com.example.librarynamedafterpushkin.entity;
 import com.example.librarynamedafterpushkin.dto.BookDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.ToString;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -23,6 +24,11 @@ public class Book {
     private String publisher;
     private String isbn;
     private Integer year;
+    private boolean available = true;
+
+    @OneToMany(mappedBy = "book")
+    @ToString.Exclude
+    private List<BookHistory> bookHistories = new ArrayList<>();
 
     public Book(BookDto dto) {
         name = dto.getName();

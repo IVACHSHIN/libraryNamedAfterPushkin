@@ -3,10 +3,11 @@ package com.example.librarynamedafterpushkin.entity;
 import com.example.librarynamedafterpushkin.dto.ClientDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.ToString;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -21,6 +22,10 @@ public class Client {
     private String lastName;
     private String email;
     private String phone;
+
+    @OneToMany(mappedBy = "client")
+    @ToString.Exclude
+    private List<BookInUse> bookInUses = new ArrayList<>();
 
     public Client(ClientDto dto) {
         firstName = dto.getFirstName();
