@@ -11,8 +11,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,10 +44,10 @@ class ClientControllerTest extends AbstractControllerTest {
     void getAllClients() throws Exception {
         ClientDto testDto1 = mockClient();
         ClientDto testDto2 = new ClientDto();
-        testDto2.setFirstName("Bohdan");
-        testDto2.setLastName("Khmelnytskyi");
-        testDto2.setEmail("bohdanLyahamNavalyav@gmail.com");
-        testDto2.setPhone("+380981234567");
+        testDto2.setFirstName("Alexandr");
+        testDto2.setLastName("Ivachshin");
+        testDto2.setEmail("ivashin45@gmail.com");
+        testDto2.setPhone("+9136132135");
 
         createAndAssert(testDto2);
         createAndAssert(testDto1);
@@ -142,7 +149,7 @@ class ClientControllerTest extends AbstractControllerTest {
                         "firstName is mandatory",
                         "lastName is mandatory",
                         "email must match \"^\\S+@\\S+\\.\\S+$\"",
-                        "phone must match \"^\\+380\\d{9}$\"")));
+                        "phone must match \"^\\+913\\d{7}$\"")));
     }
 
     @Test
@@ -161,10 +168,10 @@ class ClientControllerTest extends AbstractControllerTest {
 
     private ClientDto mockClient() {
         ClientDto dto = new ClientDto();
-        dto.setFirstName("Ivan");
-        dto.setLastName("Mazepa");
-        dto.setEmail("ivanMoskalivNaduryv@gmail.com");
-        dto.setPhone("+380501234567");
+        dto.setFirstName("Evgenya");
+        dto.setLastName("Ivachshina");
+        dto.setEmail("evgenya.ibachshina@gmail.com");
+        dto.setPhone("+9136132155");
 
         return dto;
     }
