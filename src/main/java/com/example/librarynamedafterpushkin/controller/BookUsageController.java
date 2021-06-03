@@ -1,19 +1,31 @@
 package com.example.librarynamedafterpushkin.controller;
 
+import com.example.librarynamedafterpushkin.dto.ExpiredInUseDto;
 import com.example.librarynamedafterpushkin.entity.BookHistory;
 import com.example.librarynamedafterpushkin.entity.BookInUse;
+import com.example.librarynamedafterpushkin.mapper.BookInUseMapper;
 import com.example.librarynamedafterpushkin.service.BookUsageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class BookUsageController {
 
     private final BookUsageService bookUsageService;
+    private final BookInUseMapper bookInUseMapper;
+
+    @GetMapping("/usage/expired")
+    public List<ExpiredInUseDto> expired(@RequestParam(defaultValue = "${time.expired.after}") Integer minExpiredDays) {
+        List<BookInUse> expired = bookUsageService.getExpired(minExpiredDays);
+
+        return expired.stream()
+                .map(bookInUseMapper::toDto)
+                .collect(Collectors.toList());
+    }
 
     @PutMapping("/usage/client/{clientId}/book/{bookId}")
     public BookInUse takeBook(@PathVariable Long clientId,

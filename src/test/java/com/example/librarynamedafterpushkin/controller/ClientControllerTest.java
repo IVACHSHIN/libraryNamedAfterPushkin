@@ -140,9 +140,7 @@ class ClientControllerTest extends AbstractControllerTest {
         dto.setEmail("wrong format");
         dto.setPhone("099-123-11-22");
 
-        mockMvc.perform(post("/client")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
+        createClient(dto)
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.name())))
@@ -158,29 +156,15 @@ class ClientControllerTest extends AbstractControllerTest {
         ClientDto dto = mockClient();
         createAndAssert(dto);
 
-        mockMvc.perform(post("/client")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
+        createClient(dto)
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status", is(HttpStatus.CONFLICT.name())))
                 .andExpect(jsonPath("$.errors", containsInAnyOrder("Client already exists")));
     }
 
-    private ClientDto mockClient() {
-        ClientDto dto = new ClientDto();
-        dto.setFirstName("Evgenya");
-        dto.setLastName("Ivachshina");
-        dto.setEmail("evgenya.ibachshina@gmail.com");
-        dto.setPhone("+9136132155");
-
-        return dto;
-    }
-
     private Client createAndAssert(ClientDto dto) throws Exception {
-        MvcResult mvcResult = mockMvc.perform(post("/client")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
+        MvcResult mvcResult = createClient(dto)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", not(nullValue())))
                 .andExpect(jsonPath("$.firstName", is(dto.getFirstName())))

@@ -23,9 +23,7 @@ class BookControllerTest extends AbstractControllerTest {
     void createBook() throws Exception {
         BookDto testBook = mockBook();
 
-
-        String json = objectMapper.writeValueAsString(testBook);
-        MvcResult mvcResult = mockMvc.perform(post("/book").contentType(MediaType.APPLICATION_JSON).content(json))
+        MvcResult mvcResult = createBook(testBook)
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -44,9 +42,8 @@ class BookControllerTest extends AbstractControllerTest {
     @Test
     void findBook() throws Exception {
         BookDto testBook = mockBook();
-        String json = objectMapper.writeValueAsString(testBook);
 
-        mockMvc.perform(post("/book").contentType(MediaType.APPLICATION_JSON).content(json))
+        createBook(testBook)
                 .andDo(print())
                 .andExpect(status().isCreated());
 
@@ -68,8 +65,7 @@ class BookControllerTest extends AbstractControllerTest {
         testBook.setName(null);
         testBook.setAuthor("");
 
-        mockMvc.perform(post("/book").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(testBook)))
+        createBook(testBook)
                 .andDo(print())
                 .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.status", equalTo(HttpStatus.BAD_REQUEST.name())))
@@ -78,8 +74,7 @@ class BookControllerTest extends AbstractControllerTest {
         testBook = mockBook();
         testBook.setIsbn("wrong format");
 
-        mockMvc.perform(post("/book").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(testBook)))
+    createBook(testBook)
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status", equalTo(HttpStatus.BAD_REQUEST.name())))
@@ -95,19 +90,4 @@ class BookControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("status", equalTo(HttpStatus.NOT_FOUND.name())))
                 .andExpect(jsonPath("errors", contains("Book not found")));
     }
-
-
-    private BookDto mockBook() {
-        BookDto testBook = new BookDto();
-        testBook.setName("Test name");
-        testBook.setDescription("Test description");
-        testBook.setAuthor("Test author");
-        testBook.setPublisher("Test publisher");
-        testBook.setYear(2020);
-        testBook.setIsbn("978-617-7666-64-9");
-
-        return testBook;
-    }
-
-
 }

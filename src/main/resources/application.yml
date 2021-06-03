@@ -3,3 +3,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: W800serF
+
+time:
+  expired:
+    after: 14
