@@ -4,14 +4,16 @@ import com.example.librarynamedafterpushkin.entity.Book;
 import com.example.librarynamedafterpushkin.entity.BookHistory;
 import com.example.librarynamedafterpushkin.entity.BookInUse;
 import com.example.librarynamedafterpushkin.entity.Client;
-import com.example.librarynamedafterpushkin.exception.NotFoundException;
 import com.example.librarynamedafterpushkin.repository.BookHistoryRepository;
 import com.example.librarynamedafterpushkin.repository.BookInUseRepository;
+import com.github.dockerjava.api.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -22,6 +24,14 @@ public class BookUsageService {
     private final ClientService clientService;
     private final BookHistoryRepository bookHistoryRepository;
     private final BookInUseRepository bookInUseRepository;
+    private final TimeService timeService;
+
+    @Value("${time.expired.after}")
+    private Integer expiredAfterDays;
+
+    public List<BookInUse> getExpired(Integer minExpiredDays) {
+        return bookInUseRepository.findByInUseFromBefore(timeService.currentDate().minusDays(minExpiredDays));
+    }
 
     public BookInUse takeBook(Long clientId, Long bookId) {
         Client client = clientService.get(clientId);
@@ -59,9 +69,8 @@ public class BookUsageService {
         bookInUseRepository.delete(optional.get());
         BookHistory save = bookHistoryRepository.save(bookHistory);
 
-        log.info("Client {} return a book {}", clientId, bookId);
+        log.info("Client {} returns a book {}", clientId, bookId);
 
         return save;
-
     }
 }

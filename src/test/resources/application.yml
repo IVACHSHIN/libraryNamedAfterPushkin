@@ -1,3 +1,7 @@
 spring:
   datasource:
     url: jdbc:tc:postgresql:9.6.8:///postgres
+
+time:
+  expired:
+    after: 14
