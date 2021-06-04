@@ -3,14 +3,11 @@ package com.example.librarynamedafterpushkin.controller;
 import com.example.librarynamedafterpushkin.AbstractControllerTest;
 import com.example.librarynamedafterpushkin.dto.ClientDto;
 import com.example.librarynamedafterpushkin.entity.Client;
-import com.example.librarynamedafterpushkin.repository.ClientRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
-
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -18,16 +15,12 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ClientControllerTest extends AbstractControllerTest {
-
-    @Autowired
-    private ClientRepository clientRepository;
 
     @AfterEach
     void clearAfter() {
@@ -46,7 +39,7 @@ class ClientControllerTest extends AbstractControllerTest {
         ClientDto testDto2 = new ClientDto();
         testDto2.setFirstName("Alexandr");
         testDto2.setLastName("Ivachshin");
-        testDto2.setEmail("ivashin45@gmail.com");
+        testDto2.setEmail("alexandr.ivachshin@gmail.com");
         testDto2.setPhone("+9136132135");
 
         createAndAssert(testDto2);
@@ -106,7 +99,7 @@ class ClientControllerTest extends AbstractControllerTest {
         ClientDto dto = mockClient();
         Client client = createAndAssert(dto);
 
-        dto.setFirstName("Mykola");
+        dto.setFirstName("Alexandr");
 
         mockMvc.perform(put("/client/" + client.getId())
                 .contentType(MediaType.APPLICATION_JSON)

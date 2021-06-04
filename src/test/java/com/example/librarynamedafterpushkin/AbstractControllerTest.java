@@ -2,6 +2,8 @@ package com.example.librarynamedafterpushkin;
 
 import com.example.librarynamedafterpushkin.dto.BookDto;
 import com.example.librarynamedafterpushkin.dto.ClientDto;
+import com.example.librarynamedafterpushkin.repository.BookRepository;
+import com.example.librarynamedafterpushkin.repository.ClientRepository;
 import com.example.librarynamedafterpushkin.service.TimeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -24,23 +26,27 @@ public abstract class AbstractControllerTest {
     protected MockMvc mockMvc;
     @Autowired
     protected ObjectMapper objectMapper;
+    @Autowired
+    protected ClientRepository clientRepository;
+    @Autowired
+    protected BookRepository bookRepository;
 
     @MockBean
     protected TimeService timeService;
 
-
     @SneakyThrows
     protected ResultActions createClient(ClientDto dto) {
         return mockMvc.perform(post("/client")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(dto)));
-}
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)));
+    }
+
     protected ClientDto mockClient() {
         ClientDto dto = new ClientDto();
-        dto.setFirstName("Evgenya");
-        dto.setLastName("Ivachshina");
-        dto.setEmail("evgenya.ibachshina@gmail.com");
-        dto.setPhone("+9136132155");
+        dto.setFirstName("Andrey");
+        dto.setLastName("Ivanov");
+        dto.setEmail("andreyivanov@gmail.com");
+        dto.setPhone("+9136132134");
 
         return dto;
     }
@@ -58,7 +64,7 @@ public abstract class AbstractControllerTest {
         testBook.setAuthor("Test author");
         testBook.setPublisher("Test publisher");
         testBook.setYear(2020);
-        testBook.setIsbn("978-617-7666-64-9");
+        testBook.setIsbn("978-617-7866-64-9");
 
         return testBook;
     }
